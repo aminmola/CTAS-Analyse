@@ -1,16 +1,16 @@
 from analyse import analyse
+from flask import Flask, request
 from flask import jsonify
-import uvicorn
-from fastapi import FastAPI
-from starlette.responses import FileResponse
-app = FastAPI()
 
-@app.post("/analyse")
-async def index(input):
-    return analyse(input)
-@app.get("/")
-async def read_index():
-    return FileResponse('index.html')
+app = Flask(__name__)
+
+
+@app.route('/analyse')
+def index():
+    text = request.args.get('input')
+    return jsonify(analyse(text))
+
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=4030)
+    app.run("0.0.0.0", port=4030, debug=True)
+    # from waitress import serve
